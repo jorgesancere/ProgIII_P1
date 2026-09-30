@@ -1,58 +1,59 @@
 #ifndef PUNTOGPS_H
 #define PUNTOGPS_H
 
-#include<string>
+#include <string>
 
-using namespace std;
-
-class PuntoGPS{
-
+class PuntoGPS {
 private:
+    // Atributos
+    double latitud;            // grados, rango [-90, 90]
+    double longitud;           // grados, rango [-180, 180]
+    double altitud;            // metros, >= 0
+    unsigned long timestamp;   // segundos (marca de tiempo)
+    std::string dispositivo;   // identificador del dispositivo que tomo la medida
+    int num_datos_extra;       // numero de datos adicionales
+    double* datos_extra;       // vector dinamico de datos adicionales (nullptr si no hay)
 
+    // Metodo auxiliar: true si minimo <= valor <= maximo
+    static bool enRango(double valor, double minimo, double maximo);
 
 public:
-//Forma canónica
-PuntoGPS();
-PuntoGPS(double, double, double, unsigned long, string);
-PuntoGPS(double, double, double, unsigned long, string, unsigned int);
-PuntoGPS(const PuntoGPS &);
-~PuntoGPS();
-PuntoGPS& operator=(const PuntoGPS &);
+    // Forma canónica
+    PuntoGPS();
+    PuntoGPS(double lat, double lon, double alt, unsigned long t, std::string disp);
+    PuntoGPS(double lat, double lon, double alt, unsigned long t, std::string disp, unsigned int numExtra);
+    PuntoGPS(const PuntoGPS &otro);
+    ~PuntoGPS();
+    PuntoGPS& operator=(const PuntoGPS &otro);
 
-//Getters y setters
-double getLatitud() const;
-bool setLatitud(double);
-double getLongitud() const;
-bool setLongitud(double);
-double getAltitud() const;
-bool setAltitud(double);
-unsigned long getTimestamp() const;
-void setTimestamp(unsigned long);
-string getDispositivo() const;
-void setDispositivo(const string&);
-int getNumDatosExtra() const; 
-double getDatoExtra(int) const;
-bool setDatoExtra(int, double);
+    // Getters y setters
+    double getLatitud() const;
+    bool setLatitud(double lat);
+    double getLongitud() const;
+    bool setLongitud(double lon);
+    double getAltitud() const;
+    bool setAltitud(double alt);
+    unsigned long getTimestamp() const;
+    void setTimestamp(unsigned long t);
+    std::string getDispositivo() const;
+    void setDispositivo(const std::string& disp);
+    int getNumDatosExtra() const; 
+    double getDatoExtra(int indice) const;
+    bool setDatoExtra(int indice, double valor);
 
+    // Sobrecarga de operadores
+    bool operator<(const PuntoGPS& otro) const;
+    bool operator>(const PuntoGPS& otro) const;
+    bool operator==(const PuntoGPS& otro) const;
+    bool operator!=(const PuntoGPS& otro) const;
 
-//Sobrecarga de operadores
-bool operator<(const PuntoGPS&) const; //compara timestamp
-bool operator>(const PuntoGPS&) const; //compara timestamp
-bool operator==(const PuntoGPS&) const; //Si latitud, longitud, altitud y tiempo son iguales
-bool operator!=(const PuntoGPS&) const;
+    // Distancias y velocidad
+    double distanciaSuperficie(const PuntoGPS& otro) const;
+    double distancia3D(const PuntoGPS& otro) const;
+    double velocidad(const PuntoGPS& otro) const;
 
-//distanciaSuperficie: https://en.wikipedia.org/wiki/Haversine_formula
-double distanciaSuperficie(const PuntoGPS& otro) const;
-
-//distancia3D: distancia Euclidea usando la diferencia en altitud y en superficie
-double distancia3D(const PuntoGPS& otro) const;
-
-//Velocidad (3D)
-double velocidad(const PuntoGPS& otro) const;
-
-//Representación
-string aCadena() const;
-
+    // Representación
+    std::string aCadena() const;
 };
 
 #endif
