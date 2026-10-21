@@ -11,7 +11,7 @@ private:
     double altitud;            // metros, >= 0
     unsigned long timestamp;   // segundos (marca de tiempo)
     std::string dispositivo;   // identificador del dispositivo que tomo la medida
-    int num_datos_extra;       // numero de datos adicionales
+    unsigned int num_datos_extra;       // numero de datos adicionales
     double* datos_extra;       // vector dinamico de datos adicionales (nullptr si no hay)
 
     // Metodo auxiliar: true si minimo <= valor <= maximo
@@ -40,6 +40,8 @@ public:
     int getNumDatosExtra() const; 
     double getDatoExtra(int indice) const;
     bool setDatoExtra(int indice, double valor);
+    
+    void anadirDatoExtra(double nuevoValor);
 
     // Sobrecarga de operadores
     bool operator<(const PuntoGPS& otro) const;
@@ -54,6 +56,8 @@ public:
 
     // Representación
     std::string aCadena() const;
+
+
 };
 
 #endif

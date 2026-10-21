@@ -191,6 +191,38 @@ int main() {
     probar(p6.aCadena() == "(38.385400,-0.512700,120.500000,1758024000) GARMIN-01 12.500000 3.400000", 
            "aCadena genera la representación correcta para puntos con datos extra");
 
+    // ------------------------------------------------------------------
+    // 7. Casos límite adicionales de la Sesión 4
+    // ------------------------------------------------------------------
+    cout << endl << "--- 7. Casos Límite Adicionales (Sesión 4) ---" << endl;
+
+    PuntoGPS pLimites(-90.0, 180.0, 0.0, 50, "LIMITES");
+    probar(pLimites.getLatitud() == -90.0 && pLimites.getLongitud() == 180.0 &&
+           pLimites.getAltitud() == 0.0,
+           "Los límites válidos de latitud, longitud y altitud se aceptan");
+
+    probar(!(pT1 > pT1Igual), "operator> devuelve false para timestamps iguales");
+    probar(!(pT1 != pT1Igual), "operator!= devuelve false cuando los puntos son iguales");
+
+    PuntoGPS pEpsilonExacto(40.0 + 1.1 * EPSILON, -3.0, 100.0, 1000, "DEV-EPS");
+    probar(pT1 != pEpsilonExacto,
+           "operator== rechaza diferencias de coma flotante mayores que EPSILON");
+
+    PuntoGPS pSinExtras;
+    probar(pSinExtras.getDatoExtra(0) == 0.0 && !pSinExtras.setDatoExtra(0, 1.0),
+           "Un punto sin datos extra no permite acceder ni modificar posiciones inexistentes");
+
+    PuntoGPS pCadVacia(0.0, 0.0, 0.0, 0, "");
+    probar(pCadVacia.aCadena() == "(0.000000,0.000000,0.000000,0) ",
+           "aCadena mantiene el formato incluso con dispositivo vacío");
+
+    PuntoGPS pAsignacionVacia(10.0, 20.0, 30.0, 40, "TEMP", 2);
+    pAsignacionVacia.setDatoExtra(0, 123.0);
+    pAsignacionVacia = pSinExtras;
+    probar(pAsignacionVacia.getNumDatosExtra() == 0 &&
+           pAsignacionVacia.getDatoExtra(0) == 0.0,
+           "La asignación libera correctamente los datos extra anteriores al asignar un objeto sin extras");
+
     cout << endl << "¡Todas las pruebas han pasado con éxito!" << endl;
     return 0;
 }
