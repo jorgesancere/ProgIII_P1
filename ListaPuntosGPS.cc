@@ -14,8 +14,6 @@
 
 
 //Clase ListaPuntosGPS
-
 //Clase NodoLista
-
 //Clase IteradorLista
 

@@ -5,6 +5,7 @@ using namespace std;
 //Includes
 #include <string>
 #include "PuntoGPS.h"
+
 class NodoLista {
 
 private:
