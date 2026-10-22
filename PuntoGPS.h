@@ -1,6 +1,6 @@
 #ifndef PUNTOGPS_H
 #define PUNTOGPS_H
-
+using namespace std;
 #include <string>
 
 class PuntoGPS {
